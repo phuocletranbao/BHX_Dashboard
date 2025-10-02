@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 
 # ===== 1. Đọc file =====
-file_now  = "/Users/letranbaophuoc/Downloads/WEB/data.xlsx"   # tháng hiện tại
-file_old  = "/Users/letranbaophuoc/Downloads/WEB/data3.xlsx"  # tổng 3 tháng trước
-file_nh   = "/Users/letranbaophuoc/Downloads/WEB/nh.xlsx"     # mapping ngành hàng -> nhóm
+file_now  = "data.xlsx"   # tháng hiện tại
+file_old  = "data3.xlsx"  # tổng 3 tháng trước
+file_nh   = "nh.xlsx"     # mapping ngành hàng -> nhóm
 
 df_now = pd.read_excel(file_now)
 df_old = pd.read_excel(file_old)
