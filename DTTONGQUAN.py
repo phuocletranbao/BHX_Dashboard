@@ -55,7 +55,7 @@ def style_change(val):
 
 # ===== 6. Hiển thị chỉ số tổng quan =====
 st.title("📊 Báo cáo Doanh thu theo Siêu thị")
-st.subheader(f"🏬Siêu thị: {chon_sieuthi}")
+st.subheader(f"🏬 Siêu thị: {chon_sieuthi}")
 
 st.markdown("### 🔹 Chỉ số tổng quan")
 
@@ -119,17 +119,19 @@ st.write(
     unsafe_allow_html=True
 )
 
-# ===== 8. Top 5 model theo ngành hàng =====
-st.markdown("### 🔹 Top 5 Model theo từng ngành hàng")
+# ===== 8. Top 5 model theo 5 ngành hàng doanh thu cao nhất =====
+st.markdown("### 🔹 Top 5 Model theo 5 ngành hàng doanh thu cao nhất")
 
-ds_nganh = [
-    "Rau Củ Các Loại","Thịt gia cầm gia súc các loại","Thủy Hải Sản Các Loại","Thực phẩm tươi sống","Trái Cây Các Loại",
-    "Thức uống giải khát các loại","Thực phẩm - Gia vị các loại","Hóa phẩm các loại","Bánh kẹo - Trà - Cà phê - Bột Dinh Dưỡng các loại",
-    "Mỹ phẩm các loại","Bia Các Loại","Sữa - Thức uống bổ dưỡng các loại","Dụng cụ gia đình","Làm Đẹp","Dụng cụ nhà bếp",
-    "Kem các loại","Thực phẩm đông lạnh - Hàng mát các loại","Sản Phẩm Từ Sữa - Bảo Quản Mát"
-]
+# Lấy 5 ngành hàng doanh thu cao nhất
+nganh_top = (
+    df_now.groupby("Ngành hàng")["Tổng doanh thu"]
+          .sum()
+          .sort_values(ascending=False)
+          .head(5)
+          .index
+)
 
-for nganh in ds_nganh:
+for nganh in nganh_top:
     df_n = df_now[df_now["Ngành hàng"]==nganh]
     df_o = df_old[df_old["Ngành hàng"]==nganh]
 
@@ -153,5 +155,6 @@ for nganh in ds_nganh:
     top_merge["Tổng doanh thu"] = top_merge["Tổng doanh thu"].astype(int).map("{:,}".format)
     top_merge["% TB 3 Tháng"] = top_merge["% TB 3 Tháng"].apply(lambda x: style_change(x))
 
-    st.markdown(f"#### 🛒 {nganh}")
+    tong_nganh = df_n["Tổng doanh thu"].sum()
+    st.markdown(f"#### 🛒 {nganh} (Tổng doanh thu: {tong_nganh:,.0f})")
     st.write(top_merge[["Model","Tổng số lượng","Tổng doanh thu","% TB 3 Tháng"]].to_html(escape=False,index=False), unsafe_allow_html=True)
