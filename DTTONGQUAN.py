@@ -1,14 +1,29 @@
 import streamlit as st
 import pandas as pd
 
+# ===== 0. Hàm đọc file an toàn =====
+def read_file(file_path):
+    try:
+        # Thử đọc Excel
+        return pd.read_excel(file_path, engine="openpyxl")
+    except Exception as e1:
+        try:
+            # Thử đọc CSV
+            return pd.read_csv(file_path)
+        except Exception as e2:
+            raise ValueError(
+                f"❌ Không đọc được file {file_path}. "
+                f"Excel error: {e1} | CSV error: {e2}"
+            )
+
 # ===== 1. Đọc file =====
 file_now  = "data.xlsx"   # tháng hiện tại
 file_old  = "data3.xlsx"  # tổng 3 tháng trước
 file_nh   = "nh.xlsx"     # mapping ngành hàng -> nhóm
 
-df_now = pd.read_excel(file_now)
-df_old = pd.read_excel(file_old)
-mapping = pd.read_excel(file_nh)
+df_now = read_file(file_now)
+df_old = read_file(file_old)
+mapping = read_file(file_nh)
 
 # ===== 2. Chuẩn hóa =====
 df_now.columns = df_now.columns.str.strip()
